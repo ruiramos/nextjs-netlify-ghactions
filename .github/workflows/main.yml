@@ -36,9 +36,8 @@ jobs:
         run: yarn test
 
       - name: Build project
-        uses: netlify/actions/cli@master
-        with:
-          args: build
+        run: |
+          netlify build
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
@@ -54,9 +53,15 @@ jobs:
 
       - name: Production deployment
         id: deploy-netlify
-        uses: netlify/actions/cli@master
-        with:
-          args: deploy --prod
+        run: |
+          COMMAND="netlify deploy --prod"
+          OUTPUT=$(sh -c "$COMMAND")
+
+          NETLIFY_LOGS_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://app.netlify.com/[a-zA-Z0-9./?=_-]*') #Unique key: app.netlify.com
+          NETLIFY_LIVE_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://[a-zA-Z0-9./?=_-]*' | grep -Eov "netlify.com") #Unique key: don't containr -- and app.netlify.com
+
+          echo "::set-output name=NETLIFY_LOGS_URL::$NETLIFY_LOGS_URL"
+          echo "::set-output name=NETLIFY_LIVE_URL::$NETLIFY_LIVE_URL"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
