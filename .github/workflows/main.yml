@@ -7,13 +7,18 @@ on:
 
 jobs:
   deploy:
-    environment:
-      name: production
-      url: ${{ steps.deploy-netlify.outputs.NETLIFY_LIVE_URL }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Setup deployment
+        uses: bobheadxi/deployments@v0.6.0
+        id: deployment
+        with:
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: production
 
       # Cache node modules and next folder
       - name: Caching
@@ -53,9 +58,19 @@ jobs:
           NETLIFY_LOGS_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://app.netlify.com/[a-zA-Z0-9./?=_-]*') # Unique key: app.netlify.com
           NETLIFY_LIVE_URL=$(echo "$OUTPUT" | grep -Eo '(http|https)://[a-zA-Z0-9./?=_-]*' | grep -Ev "netlify.com|(--)") # Unique key: doesn't contain -- and app.netlify.com
 
-          echo "::set-output name=NETLIFY_LOGS_URL::$NETLIFY_LOGS_URL"
-          echo "::set-output name=NETLIFY_LIVE_URL::$NETLIFY_LIVE_URL"
+          echo "::set-output name=netlify_logs_url::$NETLIFY_LOGS_URL"
+          echo "::set-output name=netlify_live_url::$NETLIFY_LIVE_URL"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
+      - name: Update deployment status
+        uses: bobheadxi/deployments@v0.6.0
+        if: always()
+        with:
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          logs: ${{ steps.deploy-netlify.outputs.netlify_logs_url }}
+          env_url: ${{ steps.deploy-netlify.outputs.netlify_live_url }}
