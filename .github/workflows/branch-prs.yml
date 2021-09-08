@@ -22,6 +22,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           env: branch-deploy-${{ github.head_ref }}
           ref: ${{ github.head_ref }}
+          transient: true
 
       # Cache node modules and next folder
       - name: Caching
@@ -77,3 +78,4 @@ jobs:
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
           logs: ${{ steps.deploy-netlify.outputs.netlify_logs_url }}
           env_url: ${{ steps.deploy-netlify.outputs.netlify_preview_url }}
+          autoInactive: false
