@@ -27,7 +27,7 @@ jobs:
       - name: Test with overriding secrets per env
         run: |
           echo $SECRET | base64
-        with:
+        env:
           SECRET: ${{ secrets.EXAMPLE_SECRET }}
 
       # Cache node modules and next folder
