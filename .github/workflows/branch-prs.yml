@@ -9,7 +9,9 @@ jobs:
   deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
-    environment: branch-deploy-${{ github.head_ref }}
+    environment: 
+      name: branch-deploy-${{ github.head_ref }}
+      url: ${{ steps.deploy-netlify.outputs.netlify_preview_url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
