@@ -18,9 +18,7 @@ jobs:
         with:
           step: start
           token: ${{ secrets.GITHUB_TOKEN }}
-          env: branch-deploy
-          no_override: false
-
+          env: branch-deploy-${{ github.head_ref }}
 
       # Cache node modules and next folder
       - name: Caching
