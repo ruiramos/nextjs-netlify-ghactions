@@ -21,6 +21,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           env: production
 
+      - name: Test with overriding secrets per env
+        run: |
+          echo $SECRET | base64
+        with:
+          SECRET: ${{ secrets.EXAMPLE_SECRET }}
+
       # Cache node modules and next folder
       - name: Caching
         uses: actions/cache@v2
