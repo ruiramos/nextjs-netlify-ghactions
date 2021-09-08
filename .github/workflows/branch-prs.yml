@@ -22,7 +22,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           env: branch-deploy-${{ github.head_ref }}
           ref: ${{ github.head_ref }}
-          transient: true
 
       - name: Test with overriding secrets per env
         run: |
