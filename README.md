@@ -1,6 +1,6 @@
 ## Next.js + Netlify + Github Actions
 
-This intends to be the template repository [accompanying this blog post]().
+This intends to be the template repository [accompanying this blog post](https://awesome.red-badger.com/ruiramos/nextjs-github-netlify/).
 
 It's a minimal setup of a Next.js website deployed to Netlify using Github Actions workflows. It also includes prettier and Jest installed/configured as dependencies.
 
@@ -26,7 +26,7 @@ To enable Netlify deployments, two secrets are expected to be exposed to Github 
    page](https://app.netlify.com/user/applications) (they call it Personal
    Access Tokens)
 
-Please have a look at the [blog post]() for more context.
+Please have a look at the [blog post](https://awesome.red-badger.com/ruiramos/nextjs-github-netlify/) for more context.
 
 Happy hacking!
 
