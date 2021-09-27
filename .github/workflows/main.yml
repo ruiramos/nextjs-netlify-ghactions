@@ -9,17 +9,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Build and deploy
+    environment:
+      name: production
+      url: ${{ steps.deploy-netlify.outputs.NETLIFY_LIVE_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Setup deployment
-        uses: bobheadxi/deployments@v0.6.0
-        id: deployment
-        with:
-          step: start
-          token: ${{ secrets.GITHUB_TOKEN }}
-          env: production
 
       - name: Test with overriding secrets per env
         run: |
@@ -70,14 +65,3 @@ jobs:
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-
-      - name: Update deployment status
-        uses: bobheadxi/deployments@v0.6.0
-        if: always()
-        with:
-          step: finish
-          token: ${{ secrets.GITHUB_TOKEN }}
-          status: ${{ job.status }}
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          logs: ${{ steps.deploy-netlify.outputs.netlify_logs_url }}
-          env_url: ${{ steps.deploy-netlify.outputs.netlify_live_url }}
