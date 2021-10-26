@@ -1,4 +1,4 @@
-## Next.js + Netlify + Github Actions
+# Next.js + Netlify + Github Actions template
 
 This intends to be the template repository [accompanying this blog post](https://awesome.red-badger.com/ruiramos/nextjs-github-netlify/).
 
